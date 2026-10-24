@@ -1,0 +1,102 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // --------------------------------------------------------------------------
+    // GLOBAL HELPERS
+    // --------------------------------------------------------------------------
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid)) ||
+        request.auth.token.email == 'eganeboe@gmail.com'
+      );
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // Default deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // --------------------------------------------------------------------------
+    // ADMINS
+    // --------------------------------------------------------------------------
+    match /admins/{adminId} {
+      allow read: if isAdmin();
+      allow write: if isAdmin();
+    }
+
+    // --------------------------------------------------------------------------
+    // USERS
+    // --------------------------------------------------------------------------
+    match /users/{userId} {
+      allow read: if isSignedIn() && (request.auth.uid == userId || isAdmin());
+      allow write: if isSignedIn() && (request.auth.uid == userId || isAdmin());
+    }
+
+    // --------------------------------------------------------------------------
+    // FORM TEMPLATES (Dynamic Questionnaire Engine)
+    // --------------------------------------------------------------------------
+    match /formTemplates/{templateId} {
+      // Learners need to read published templates to render dynamic form
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // --------------------------------------------------------------------------
+    // APPLICATIONS
+    // --------------------------------------------------------------------------
+    match /applications/{applicationId} {
+      // Public submissions allowed; reference lookup allowed by reference number or email
+      allow create: if true;
+      allow read: if isAdmin() || (
+        isSignedIn() && resource.data.applicant.email == request.auth.token.email
+      );
+      allow update, delete: if isAdmin();
+    }
+
+    // --------------------------------------------------------------------------
+    // INSTRUCTORS
+    // --------------------------------------------------------------------------
+    match /instructors/{instructorId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // --------------------------------------------------------------------------
+    // MATCHES
+    // --------------------------------------------------------------------------
+    match /matches/{matchId} {
+      allow read: if isAdmin() || (
+        isSignedIn() && (
+          resource.data.instructorId == request.auth.uid ||
+          (resource.data.keys().hasAny(['learnerEmail']) && resource.data.learnerEmail == request.auth.token.email)
+        )
+      );
+      allow write: if isAdmin();
+    }
+
+    // --------------------------------------------------------------------------
+    // COMMITTEE FEEDBACK
+    // --------------------------------------------------------------------------
+    match /committeeFeedback/{feedbackId} {
+      allow read: if true;
+      allow create: if true;
+      allow update, delete: if isAdmin();
+    }
+
+    // --------------------------------------------------------------------------
+    // SYSTEM SETTINGS
+    // --------------------------------------------------------------------------
+    match /systemSettings/{settingId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+  }
+}

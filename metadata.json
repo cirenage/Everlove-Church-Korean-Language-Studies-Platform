@@ -1,0 +1,6 @@
+{
+  "name": "Everlove Church — Korean Language Studies Platform",
+  "description": "Everlove Church Korean Language Studies Platform for foreign residents in South Korea: digital application, dynamic questionnaire engine, administrative review, and human-confirmed instructor matching.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

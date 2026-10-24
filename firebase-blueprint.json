@@ -1,0 +1,178 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile with assigned platform role",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth user ID" },
+        "email": { "type": "string", "format": "email", "description": "User email address" },
+        "displayName": { "type": "string", "maxLength": 100, "description": "User display name" },
+        "role": { "type": "string", "enum": ["superAdmin", "churchAdmin", "instructor", "applicant"], "description": "Access control role" },
+        "createdAt": { "type": "string", "description": "Creation timestamp ISO string" },
+        "updatedAt": { "type": "string", "description": "Update timestamp ISO string" }
+      },
+      "required": ["uid", "email", "role"]
+    },
+    "Admin": {
+      "title": "Admin",
+      "description": "Trusted administrative lookup document used for ABAC/RBAC authorization",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Admin Auth UID" },
+        "email": { "type": "string", "format": "email", "description": "Admin email address" },
+        "role": { "type": "string", "enum": ["superAdmin", "churchAdmin"], "description": "Administrator tier" },
+        "addedAt": { "type": "string", "description": "Assignment timestamp" }
+      },
+      "required": ["uid", "email", "role"]
+    },
+    "FormTemplate": {
+      "title": "FormTemplate",
+      "description": "Versioned application questionnaire definition",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique form template ID" },
+        "version": { "type": "string", "maxLength": 50, "description": "Semantic form version e.g. v1.0" },
+        "title": { "type": "string", "maxLength": 200, "description": "Form title" },
+        "description": { "type": "string", "maxLength": 1000, "description": "Form description" },
+        "status": { "type": "string", "enum": ["draft", "published", "archived"], "description": "Publish status" },
+        "sections": { "type": "array", "description": "Ordered form sections" },
+        "questions": { "type": "array", "description": "All questionnaire items" },
+        "publishedAt": { "type": "string", "description": "Publication timestamp" },
+        "updatedAt": { "type": "string", "description": "Last update timestamp" }
+      },
+      "required": ["id", "version", "title", "status"]
+    },
+    "Application": {
+      "title": "Application",
+      "description": "Learner Korean language class application and lifecycle status",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique application document ID" },
+        "referenceNumber": { "type": "string", "maxLength": 64, "description": "Tracking code e.g. EL-2026-0042" },
+        "formVersionId": { "type": "string", "maxLength": 64, "description": "ID of form version used when submitting" },
+        "isDemo": { "type": "boolean", "description": "Flag for demonstration / synthetic applicant records" },
+        "status": { "type": "string", "enum": ["submitted", "under_review", "information_required", "ready_for_matching", "matched", "waitlisted", "withdrawn", "closed"], "description": "Review status" },
+        "applicant": { "type": "object", "description": "Applicant biographical and contact details" },
+        "learningProfile": { "type": "object", "description": "Korean proficiency, goals, and class interests" },
+        "availability": { "type": "object", "description": "Weekly schedule preferences and time slots" },
+        "consents": { "type": "object", "description": "Consent acknowledgements and accuracy declaration" },
+        "additionalNotes": { "type": "string", "maxLength": 2000, "description": "Optional applicant comments" },
+        "internalNotes": { "type": "string", "maxLength": 5000, "description": "Church administrator review notes" },
+        "assignedInstructorId": { "type": "string", "description": "ID of assigned instructor" },
+        "assignedInstructorName": { "type": "string", "description": "Name of assigned instructor" },
+        "matchNotes": { "type": "string", "description": "Matching justification or class details" },
+        "matchedAt": { "type": "string", "description": "Timestamp when match was made" },
+        "createdAt": { "type": "string", "description": "Submission timestamp" },
+        "updatedAt": { "type": "string", "description": "Last modification timestamp" }
+      },
+      "required": ["id", "referenceNumber", "status", "applicant", "learningProfile", "availability"]
+    },
+    "Instructor": {
+      "title": "Instructor",
+      "description": "Korean language instructor teaching profile and weekly capacity",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Instructor ID" },
+        "name": { "type": "string", "maxLength": 100, "description": "Full name" },
+        "email": { "type": "string", "format": "email", "description": "Email" },
+        "phone": { "type": "string", "maxLength": 50, "description": "Phone number" },
+        "active": { "type": "boolean", "description": "Availability for new student assignment" },
+        "experienceYears": { "type": "number", "description": "Years of teaching experience" },
+        "supportedLevels": { "type": "array", "description": "Supported learner levels" },
+        "preferredTopics": { "type": "array", "description": "Specialized topics" },
+        "languageSupport": { "type": "array", "description": "Auxiliary explanation languages e.g. English" },
+        "preferredFormat": { "type": "string", "enum": ["in_person", "online", "hybrid", "any"], "description": "Delivery format" },
+        "locations": { "type": "array", "description": "Operating areas" },
+        "weeklyAvailability": { "type": "array", "description": "Available day/time windows" },
+        "maxCapacity": { "type": "number", "description": "Max learner slots" },
+        "currentStudentsCount": { "type": "number", "description": "Currently assigned learners" },
+        "notes": { "type": "string", "maxLength": 2000, "description": "Internal notes" },
+        "isDemo": { "type": "boolean", "description": "Demo record flag" },
+        "createdAt": { "type": "string", "description": "Creation timestamp" }
+      },
+      "required": ["id", "name", "email", "active", "supportedLevels", "weeklyAvailability"]
+    },
+    "Match": {
+      "title": "Match",
+      "description": "Confirmed learner-to-instructor class assignment",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Match ID" },
+        "applicationId": { "type": "string", "description": "Referenced application ID" },
+        "instructorId": { "type": "string", "description": "Assigned instructor ID" },
+        "learnerName": { "type": "string", "maxLength": 100, "description": "Learner name" },
+        "instructorName": { "type": "string", "maxLength": 100, "description": "Instructor name" },
+        "status": { "type": "string", "enum": ["active", "completed", "cancelled"], "description": "Class status" },
+        "schedule": { "type": "string", "maxLength": 200, "description": "Agreed weekly schedule" },
+        "format": { "type": "string", "maxLength": 100, "description": "Class format" },
+        "notes": { "type": "string", "maxLength": 2000, "description": "Assignment notes" },
+        "matchedBy": { "type": "string", "maxLength": 100, "description": "Administrator who confirmed match" },
+        "matchedAt": { "type": "string", "description": "Match timestamp" }
+      },
+      "required": ["id", "applicationId", "instructorId", "status"]
+    },
+    "CommitteeFeedback": {
+      "title": "CommitteeFeedback",
+      "description": "Requirements review and MVP consultation notes from church committee members",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Feedback ID" },
+        "reviewerName": { "type": "string", "maxLength": 100, "description": "Name of committee reviewer" },
+        "screenOrFeature": { "type": "string", "maxLength": 200, "description": "Target screen or feature" },
+        "status": { "type": "string", "enum": ["approved", "requires_changes", "deferred"], "description": "Committee decision" },
+        "comment": { "type": "string", "maxLength": 3000, "description": "Detailed notes or feedback" },
+        "timestamp": { "type": "string", "description": "Submission timestamp" },
+        "isDemo": { "type": "boolean", "description": "Demo sample flag" }
+      },
+      "required": ["id", "reviewerName", "screenOrFeature", "status", "comment"]
+    },
+    "SystemSetting": {
+      "title": "SystemSetting",
+      "description": "Global church platform settings and content configuration",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Setting category ID" },
+        "programInfo": { "type": "object", "description": "Public program details" },
+        "faqs": { "type": "array", "description": "Editable FAQs" },
+        "contactInfo": { "type": "object", "description": "Support contacts" },
+        "updatedAt": { "type": "string", "description": "Last update timestamp" }
+      },
+      "required": ["id"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "User profile records"
+    },
+    "/admins/{adminId}": {
+      "schema": { "$ref": "#/entities/Admin" },
+      "description": "Trusted administrative privilege records"
+    },
+    "/formTemplates/{templateId}": {
+      "schema": { "$ref": "#/entities/FormTemplate" },
+      "description": "Dynamic form configuration and version archive"
+    },
+    "/applications/{applicationId}": {
+      "schema": { "$ref": "#/entities/Application" },
+      "description": "Learner applications and processing records"
+    },
+    "/instructors/{instructorId}": {
+      "schema": { "$ref": "#/entities/Instructor" },
+      "description": "Instructor directory and teaching capacity"
+    },
+    "/matches/{matchId}": {
+      "schema": { "$ref": "#/entities/Match" },
+      "description": "Approved student-instructor matches"
+    },
+    "/committeeFeedback/{feedbackId}": {
+      "schema": { "$ref": "#/entities/CommitteeFeedback" },
+      "description": "Church committee MVP evaluation comments and decisions"
+    },
+    "/systemSettings/{settingId}": {
+      "schema": { "$ref": "#/entities/SystemSetting" },
+      "description": "Configurable platform content and workflow parameters"
+    }
+  }
+}
