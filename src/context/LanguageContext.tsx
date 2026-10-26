@@ -1,9 +1,13 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
+import { ApplicantLanguage, APPLICANT_LANGUAGES } from '../i18n/applicantLanguages';
+
 export type Language = 'en' | 'kr';
 
 interface LanguageContextType {
   lang: Language;
+  applicantLang: ApplicantLanguage;
+  setApplicantLang: (language: ApplicantLanguage) => void;
   setLang: (lang: Language) => void;
   toggleLang: () => void;
   t: (key: string, defaultText?: string) => string;
@@ -83,6 +87,16 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     localStorage.setItem('everlove_lang', lang);
   }, [lang]);
 
+  const [applicantLang, setApplicantLangState] = useState<ApplicantLanguage>(() => {
+    const value = localStorage.getItem('everlove_applicant_lang');
+    return APPLICANT_LANGUAGES.some(item => item.code === value) ? value as ApplicantLanguage : 'en';
+  });
+  const setApplicantLang = (language: ApplicantLanguage) => setApplicantLangState(language);
+  useEffect(() => {
+    localStorage.setItem('everlove_applicant_lang', applicantLang);
+    document.documentElement.lang = applicantLang;
+  }, [applicantLang]);
+
   const toggleLang = () => {
     setLang((prev) => (prev === 'en' ? 'kr' : 'en'));
   };
@@ -95,7 +109,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   };
 
   return (
-    <LanguageContext.Provider value={{ lang, setLang, toggleLang, t }}>
+    <LanguageContext.Provider value={{ lang, setLang, applicantLang, setApplicantLang, toggleLang, t }}>
       {children}
     </LanguageContext.Provider>
   );

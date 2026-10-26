@@ -8,7 +8,7 @@ const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
 
 // Initialize Auth & Firestore with specific firestoreDatabaseId
 export const auth = getAuth(app);
-export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
+export const db = getFirestore(app);
 export const googleProvider = new GoogleAuthProvider();
 
 export enum OperationType {

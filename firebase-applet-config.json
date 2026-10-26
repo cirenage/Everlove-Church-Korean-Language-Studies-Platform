@@ -1,12 +1,12 @@
 {
-  "projectId": "jsg-high-court-ecms",
-  "appId": "1:448892998018:web:7e1415f1a993f4682f7f9b",
-  "apiKey": "AIzaSyAv19LVCqWToczOrzTNMsZmTsaSgbHf7G4",
-  "authDomain": "jsg-high-court-ecms.firebaseapp.com",
-  "firestoreDatabaseId": "ai-studio-c8090b1d-a0b5-4b85-ba7e-4441b14f1ba4",
-  "storageBucket": "jsg-high-court-ecms.firebasestorage.app",
-  "messagingSenderId": "448892998018",
-  "measurementId": "",
-  "oAuthClientId": "448892998018-c0664eoeerbbtch73p9vtt8bfplj0pjh.apps.googleusercontent.com",
+  "projectId": "everlove-church-korean-studies",
+  "appId": "1:1062884010463:web:c6abb05859c1b67e167c6a",
+  "apiKey": "AIzaSyCgk1YarEb8E8e9LGmVOYhX0smxorUBzSo",
+  "authDomain": "everlove-church-korean-studies.firebaseapp.com",
+ 
+  "storageBucket": "everlove-church-korean-studies.firebasestorage.app",
+  "messagingSenderId": "1062884010463",
+  "measurementId": "G-HCN9YDKCKW",
+ 
   "recaptchaSiteKey": ""
 }

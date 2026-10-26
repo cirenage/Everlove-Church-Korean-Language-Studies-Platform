@@ -12,17 +12,17 @@ export const Footer: React.FC = () => {
             <p className="text-[#777777] mt-0.5">Learner application & instructor matching portal</p>
           </div>
           <div className="flex flex-wrap gap-6 text-[#555555]">
-            <span className="hover:text-[#008C50] cursor-pointer">Privacy information</span>
+            <span>Privacy information</span>
             <span>·</span>
-            <span className="hover:text-[#008C50] cursor-pointer">Accessibility</span>
+            <span>Accessibility</span>
             <span>·</span>
-            <span className="text-[#888888]">Policies & support details: to be confirmed</span>
+            <span className="text-[#888888]">Korean Language Studies</span>
           </div>
         </div>
 
         <div className="pt-4 flex flex-col sm:flex-row justify-between items-center gap-2 text-[11px] text-[#999999]">
           <p>
-            Pre-development committee validation concept. Content and application requirements are subject to confirmation before launch.
+            Learn Korean, build connections, and grow with Everlove Church.
           </p>
           <p>© 2026 Everlove Church (늘사랑교회). All rights reserved.</p>
         </div>

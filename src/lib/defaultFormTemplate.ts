@@ -63,7 +63,7 @@ export const DEFAULT_FORM_SECTIONS: FormSection[] = [
     titleKr: '추가 사항 및 개인정보 동의',
     subtitleEn: 'A few final details before review',
     subtitleKr: '최종 확인 및 동의',
-    descriptionEn: 'Add anything that would help your learning, then review the provisional privacy and consent information.',
+    descriptionEn: 'Add anything that would help your learning, then review the privacy information.',
     descriptionKr: '수업 참여 시 고려할 점과 개인정보 수집 이용 동의를 확인해 주세요.',
     order: 6,
   },

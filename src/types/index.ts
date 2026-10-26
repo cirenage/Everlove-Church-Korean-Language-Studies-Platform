@@ -139,6 +139,9 @@ export interface Application {
   id: string;
   referenceNumber: string; // e.g. "EL-2026-0042" or "SAMPLE-EL-2026-0042"
   formVersionId: string;
+  formTemplateId?: string;
+  answers?: Record<string, string | string[] | boolean>;
+  formSnapshot?: { version: string; sections: FormSection[]; questions: FormQuestion[] };
   isDemo?: boolean;
   status: ApplicationStatus;
   applicant: ApplicantInfo;

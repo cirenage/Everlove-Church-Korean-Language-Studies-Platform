@@ -4,6 +4,7 @@ import { FormTemplate } from '../types';
 import { INITIAL_FORM_TEMPLATE } from '../lib/defaultFormTemplate';
 
 const COLLECTION_NAME = 'formTemplates';
+const VERSION_COLLECTION = 'formVersions';
 
 export async function getActiveFormTemplate(): Promise<FormTemplate> {
   try {
@@ -34,7 +35,7 @@ export async function saveFormTemplateDraft(template: FormTemplate): Promise<voi
       status: 'draft',
       updatedAt: new Date().toISOString(),
     };
-    await setDoc(doc(db, COLLECTION_NAME, template.id), draftTemplate, { merge: true });
+    await setDoc(doc(db, 'formDrafts', template.id), draftTemplate);
   } catch (error) {
     handleFirestoreError(error, OperationType.WRITE, `${COLLECTION_NAME}/${template.id}`);
   }
@@ -48,6 +49,11 @@ export async function publishFormTemplate(template: FormTemplate): Promise<FormT
       publishedAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
+    // Retain an immutable version snapshot before updating the active pointer.
+    const versionId = `${template.id}__${published.version.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
+    const historical = await getDoc(doc(db, VERSION_COLLECTION, versionId));
+    if (historical.exists()) throw new Error('This version has already been published.');
+    await setDoc(doc(db, VERSION_COLLECTION, versionId), published);
     await setDoc(doc(db, COLLECTION_NAME, template.id), published);
     return published;
   } catch (error) {

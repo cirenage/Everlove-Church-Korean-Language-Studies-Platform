@@ -20,7 +20,6 @@ import { getAllInstructors } from './services/instructorService';
 import { getAllMatches } from './services/matchingService';
 import { getAllCommitteeFeedback } from './services/committeeService';
 import { getActiveFormTemplate } from './services/formService';
-import { seedDemoData } from './services/demoSeedService';
 
 import { Application, Instructor, Match, CommitteeFeedback, FormTemplate } from './types';
 import { INITIAL_FORM_TEMPLATE } from './lib/defaultFormTemplate';
@@ -61,25 +60,10 @@ function AppContent() {
         getActiveFormTemplate(),
       ]);
 
-      // If database is completely pristine on first load, seed demo data for instant demonstration
-      if (apps.length === 0 && insts.length === 0) {
-        await seedDemoData();
-        const [seededApps, seededInsts, seededMtchs, seededFbs] = await Promise.all([
-          getAllApplications(),
-          getAllInstructors(),
-          getAllMatches(),
-          getAllCommitteeFeedback(),
-        ]);
-        setApplications(seededApps);
-        setInstructors(seededInsts);
-        setMatches(seededMtchs);
-        setFeedbacks(seededFbs);
-      } else {
-        setApplications(apps);
-        setInstructors(insts);
-        setMatches(mtchs);
-        setFeedbacks(fbs);
-      }
+      setApplications(apps);
+      setInstructors(insts);
+      setMatches(mtchs);
+      setFeedbacks(fbs);
       setFormTemplate(tmpl);
     } catch (err) {
       console.error('Error loading Firestore collections:', err);
@@ -92,7 +76,7 @@ function AppContent() {
     // Run connection test and initial data load
     testFirestoreConnection();
     loadPlatformData();
-  }, []);
+  }, [user?.uid]);
 
   const handleStartApplication = () => {
     setCurrentTab('apply');
@@ -112,7 +96,7 @@ function AppContent() {
   return (
     <div className="min-h-screen flex flex-col bg-[#F5F7F5]">
       {/* Top Demo Notification & Seeding Bar */}
-      <DemoSeedBar onDataChanged={loadPlatformData} />
+      {isAdmin && import.meta.env.DEV && <DemoSeedBar onDataChanged={loadPlatformData} />}
 
       {/* Main Navbar */}
       <Navbar
@@ -252,16 +236,6 @@ function AppContent() {
           </div>
         )}
 
-        {/* TAB: Dedicated Committee Feedback Registry */}
-        {currentTab === 'committee' && (
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <CommitteeReviewDashboard
-              feedbacks={feedbacks}
-              onOpenFeedbackModal={() => setIsFeedbackModalOpen(true)}
-              onRefresh={loadPlatformData}
-            />
-          </div>
-        )}
       </main>
 
       {/* Global Committee Feedback Modal */}

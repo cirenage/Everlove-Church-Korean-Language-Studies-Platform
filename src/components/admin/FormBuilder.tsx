@@ -499,6 +499,42 @@ export const FormBuilder: React.FC<FormBuilderProps> = ({ currentTemplate, onTem
                           </div>
                         </div>
 
+                        {/* Optional conditional visibility: saved in the published form definition. */}
+                        <div className="space-y-3 rounded-xl border border-emerald-100 bg-emerald-50/40 p-3">
+                          <label className="block text-xs font-bold text-[#333]">Conditional visibility (optional)</label>
+                          <p className="text-[11px] text-gray-600">Only show this question when an earlier question has the selected answer. Leave blank to always show it.</p>
+                          <select
+                            aria-label="Controlling question"
+                            className="w-full rounded-lg border border-gray-300 bg-white p-2 text-xs"
+                            value={q.condition?.dependsOnQuestionId || ''}
+                            onChange={e => {
+                              const parent = template.questions.find(item => item.id === e.target.value);
+                              setTemplate(prev => ({ ...prev, questions: prev.questions.map(item => item.id === q.id ? {
+                                ...item, condition: parent ? { dependsOnQuestionId: parent.id, operator: 'includes', value: parent.optionsEn?.[0] || '' } : undefined
+                              } : item) }));
+                            }}
+                          >
+                            <option value="">Always show</option>
+                            {template.questions.filter(item => item.id !== q.id && item.active && item.order < q.order && ['radio','checkbox','dropdown','yes_no'].includes(item.type)).sort((a,b) => a.order-b.order).map(item => (
+                              <option key={item.id} value={item.id}>Q{item.sourceQuestionNumber} — {item.labelEn}</option>
+                            ))}
+                          </select>
+                          {q.condition && <>
+                            <select aria-label="Visibility rule" className="w-full rounded-lg border border-gray-300 bg-white p-2 text-xs"
+                              value={q.condition.operator}
+                              onChange={e => setTemplate(prev => ({ ...prev, questions: prev.questions.map(item => item.id === q.id ? { ...item, condition: { ...q.condition!, operator: e.target.value as 'equals' | 'includes' | 'not_empty' } } : item) }))}>
+                              <option value="equals">Equals</option>
+                              <option value="includes">Includes (for multiple selections)</option>
+                              <option value="not_empty">Has an answer</option>
+                            </select>
+                            {q.condition.operator !== 'not_empty' && <select aria-label="Required controlling answer" className="w-full rounded-lg border border-gray-300 bg-white p-2 text-xs"
+                              value={q.condition.value}
+                              onChange={e => setTemplate(prev => ({ ...prev, questions: prev.questions.map(item => item.id === q.id ? { ...item, condition: { ...q.condition!, value: e.target.value } } : item) }))}>
+                              {(template.questions.find(item => item.id === q.condition?.dependsOnQuestionId)?.optionsEn || []).map((opt, i) => <option key={i} value={opt}>{opt}</option>)}
+                            </select>}
+                          </>}
+                        </div>
+
                         {/* Options editor for choice types */}
                         {(q.type === 'radio' || q.type === 'checkbox' || q.type === 'dropdown') && (
                           <div className="space-y-2 pt-2">

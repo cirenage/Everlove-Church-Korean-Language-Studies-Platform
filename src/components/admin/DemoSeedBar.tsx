@@ -14,7 +14,7 @@ export const DemoSeedBar: React.FC<DemoSeedBarProps> = ({ onDataChanged }) => {
     try {
       setLoading(true);
       const res = await seedDemoData();
-      setMessage(`Seeded ${res.applicantsCount} fictional applicants, ${res.instructorsCount} instructors, and review data!`);
+      setMessage(`Seeded ${res.applicantsCount} fictional applicants, ${res.instructorsCount} instructors, and testing records!`);
       onDataChanged();
       setTimeout(() => setMessage(null), 5000);
     } catch (err) {
@@ -49,7 +49,7 @@ export const DemoSeedBar: React.FC<DemoSeedBarProps> = ({ onDataChanged }) => {
             DEMONSTRATION MODE
           </span>
           <span className="hidden sm:inline">
-            Fictional data for Everlove Church committee review. Real enrollment records are separate.
+            Sample records for testing only. Not actual applications.
           </span>
         </div>
 

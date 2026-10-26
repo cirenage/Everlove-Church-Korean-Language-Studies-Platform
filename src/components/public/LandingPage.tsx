@@ -31,14 +31,14 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartApplication, on
     {
       q: 'Can I apply if I am completely new to Korean?',
       qKr: '한국어를 전혀 몰라도 신청할 수 있나요?',
-      a: 'Yes, you can describe yourself as a first-time learner. Final participation requirements and beginner class availability are to be confirmed by the church committee.',
-      aKr: '네, 한국어를 처음 접하시는 분도 신청 가능합니다. 최종 개설 일정과 기초반 인원은 위원회 확정 후 안내됩니다.',
+      a: 'Yes. Select the option that best describes your current Korean language experience.',
+      aKr: '네. 현재 한국어 실력에 맞는 항목을 선택해 주세요.',
     },
     {
       q: 'When and where are classes, and what do they cost?',
       qKr: '수업 일정, 장소 및 수강료는 어떻게 되나요?',
-      a: 'Schedules, location, fees, and enrollment dates are not yet confirmed. This MVP platform supports requirements gathering and application processing rather than announcing a finalized schedule.',
-      aKr: '수업 시간표, 장소(늘사랑교회 본관/교육관 또는 온라인) 및 비용 정책은 교회 위원회 검토 중이며 추후 확정 공지됩니다.',
+      a: 'Please use the feedback button to ask about current class schedules, locations, and other program details.',
+      aKr: '수업 일정과 장소 등 자세한 사항은 문의해 주세요.',
     },
     {
       q: 'Will I be matched with an instructor right away?',
@@ -49,7 +49,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartApplication, on
     {
       q: 'Who will review my information?',
       qKr: '제 신청 정보는 누가 확인하나요?',
-      a: 'Applications are strictly restricted to authorized Everlove Church administrators and assigned instructors. Full privacy policy and retention terms will be published before live rollout.',
+      a: 'Application information is used to process learning requests. Please read the privacy notice before submitting.',
       aKr: '승인된 늘사랑교회 한국어학당 운영진 및 매칭된 담당 강사에게만 제한적으로 공유되며, 안전하게 관리됩니다.',
     },
   ];
@@ -137,14 +137,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartApplication, on
             </div>
           </div>
 
-          {/* Provisional info banner */}
-          <div className="mt-12 bg-white rounded-xl border border-gray-200/80 p-4 sm:p-5 flex items-start gap-3 shadow-2xs">
-            <Info className="w-5 h-5 text-[#F3981B] shrink-0 mt-0.5" />
-            <div className="text-xs sm:text-sm text-[#555555]">
-              <span className="font-semibold text-[#333333]">Before you apply: </span>
-              Class schedules, location, fees, enrollment dates, and participation requirements are to be confirmed by the Everlove Church committee.
-            </div>
-          </div>
         </div>
       </section>
 
@@ -159,7 +151,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartApplication, on
               A starting point that feels right for you
             </h2>
             <p className="text-sm text-[#666666]">
-              Learning begins with your current level and everyday goals. Use these level options to describe where you are today; available classes and placement will be confirmed after review.
+              Learning begins with your current level and everyday goals. Select the option that describes your experience.
             </p>
           </div>
 
@@ -278,7 +270,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartApplication, on
             <div>
               <h4 className="text-lg font-bold text-[#333333] mb-1">A little preparation helps</h4>
               <p className="text-xs text-[#777777]">
-                Use this as a preparation guide. Final required fields and review timelines are to be confirmed.
+                Have your contact information, learning goals, and availability ready.
               </p>
             </div>
             <div className="flex flex-wrap gap-4 text-xs font-medium text-[#444444]">
@@ -313,11 +305,11 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartApplication, on
                   Support for your next step
                 </h3>
                 <p className="text-sm text-[#666666] leading-relaxed mb-6">
-                  For questions about applying, choosing a level, or accessibility needs, learner support arrangements and contact options will be published once confirmed.
+                  Have a question about your application, learning level, or accessibility? Use the Give Feedback button to get in touch.
                 </p>
                 <div className="p-3 bg-white rounded-lg border border-gray-200 text-xs text-[#777777]">
                   <span className="font-semibold text-[#333333]">Contact details & support hours: </span>
-                  to be confirmed by church committee.
+                  Use the Give Feedback button to contact the team.
                 </div>
               </div>
             </div>
